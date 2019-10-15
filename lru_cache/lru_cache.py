@@ -17,6 +17,16 @@ class LRUCache:
         self.dll = DoublyLinkedList()
         self.cache = {}
 
+    def search_node_by_value(self, value):
+        node = self.dll.head
+        if node.value == value:
+            return node
+        while self.dll.tail is not node:
+            node = node.next
+            if node.value == value:
+                return node
+        return None
+
     """
     Retrieves the value associated with the given key. Also
     needs to move the key-value pair to the end of the order
@@ -26,12 +36,13 @@ class LRUCache:
     """
 
     def get(self, key):
-        if key not in self.cache.keys():
+        if key not in self.cache:
             return None
-        
-        node = self.cache[key]
-        self.dll.add_to_tail(node.value)
-        return node.value
+
+        value = self.cache[key]
+        node = self.search_node_by_value(key)
+        self.dll.move_to_front(node)
+        return value
 
     """
     Adds the given key-value pair to the cache. The newly-
@@ -45,8 +56,13 @@ class LRUCache:
     """
 
     def set(self, key, value):
-        if self.size >= self.limit:
-            self.dll.remove_from_head()
-        self.size += 1
-        self.cache[key] = ListNode(value)
-        self.dll.add_to_tail(value)
+        if not key in self.cache:
+            self.cache[key] = value
+            self.dll.add_to_head(key)
+        else:
+            self.cache[key] = value
+            node = ListNode(value)
+            self.dll.move_to_front(node)
+        if self.dll.length > self.limit:
+            del self.cache[self.dll.tail.value]
+            self.dll.remove_from_tail()
