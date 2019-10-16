@@ -1,27 +1,68 @@
+# from dll_stack import Stack
+# from dll_queue import Queue
 import sys
 sys.path.append('../queue_and_stack')
-from dll_queue import Queue
-from dll_stack import Stack
 
 
-class BinarySearchTree:
+class Node:
     def __init__(self, value):
         self.value = value
         self.left = None
         self.right = None
 
-    # Insert the given value into the tree
-    def insert(self, value):
-        pass
 
-    # Return True if the tree contains the value
-    # False if it does not
+class BinarySearchTree:
+    def __init__(self, value):
+        self.bst = Node(value)
+
+    # Insert the given value into the tree
+
+    def insert(self, value):
+        # LESS THAN
+        if value < self.bst.value:
+            if self.bst.left is None:
+                print("insert left")
+                self.bst.left = Node(value)
+                return
+            else:
+                print(f"move to left")
+                self.bst.value = self.bst.left.value
+                self.insert(value)
+
+        # GREATER THAN
+        elif value > self.bst.value:
+            if self.bst.right is None:
+                print("insert right")
+                self.bst.right = Node(value)
+                return
+            else:
+                print(f"{self.bst.value} move right")
+                self.bst.value = self.bst.right.value
+                self.insert(value)
+
+        # Return True if the tree contains the value
+        # False if it does not
+
     def contains(self, target):
+        # if target == self.value:
+        #     return True
+        # if target < self.value:
+        #     self.value = self.left
+        #     self.contains(target)
+        # if target > self.value:
+        #     self.value = self.right
+        #     self.contains(target)
+        # return False
         pass
 
     # Return the maximum value found in the tree
+
     def get_max(self):
-        pass
+        if self.right is None:
+            return self.value
+        if self.right is not None:
+            self.value = self.right
+            self.get_max()
 
     # Call the function `cb` on the value of each node
     # You may use a recursive or iterative approach
