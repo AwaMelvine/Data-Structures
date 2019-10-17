@@ -17,13 +17,13 @@ class LRUCache:
         self.dll = DoublyLinkedList()
         self.cache = {}
 
-    def search_node_by_value(self, value):
+    def find_node(self, key):
         node = self.dll.head
-        if node.value == value:
+        if node.value == key:
             return node
         while self.dll.tail is not node:
             node = node.next
-            if node.value == value:
+            if node.value == key:
                 return node
         return None
 
@@ -40,7 +40,7 @@ class LRUCache:
             return None
 
         value = self.cache[key]
-        node = self.search_node_by_value(key)
+        node = self.find_node(key)
         self.dll.move_to_front(node)
         return value
 
